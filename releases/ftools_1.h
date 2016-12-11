@@ -13,12 +13,12 @@ void FixPath(char path[256])
         strcat(path, "\\");
 }
 
-void FileContentToFile(char from[256], char to[256])
+void FileContentToFile(char fileFrom[256], char fileTo[256])
 {
-    ifstream stream1(from);
-    ofstream stream2(to);
+    ifstream stream1(fileFrom);
+    ofstream stream2(fileTo);
     stream2 << stream1.rdbuf();
-    cout<<from<<" >> "<<to<<endl;
+    cout<<fileFrom<<" >> "<<fileTo<<endl;
 }
 
 void FileContentToFolderFiles(char file[256], char folder[256], bool includeSubfolders)
