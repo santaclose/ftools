@@ -1,3 +1,1 @@
 # ftools
-
-some useful methods
