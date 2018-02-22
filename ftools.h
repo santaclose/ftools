@@ -3,17 +3,18 @@
 #include <string.h>
 #include <dirent.h>
 #include <windows.h>
+
+#define MAX_PATH_LENGTH 256
+
 using namespace std;
 
-void FixPath(char path[256])
+void FixPath(char* path)
 {
-    char slash[1];
-    strcpy(slash, "\\");
-    if(path[strlen(path)-1] != slash[0])
+    if (path[strlen(path)-1] != '\\')
         strcat(path, "\\");
 }
 
-void FileContentToFile(char fileFrom[256], char fileTo[256])
+void FileContentToFile(char* fileFrom, char* fileTo)
 {
     ifstream stream1(fileFrom);
     ofstream stream2(fileTo);
@@ -21,7 +22,7 @@ void FileContentToFile(char fileFrom[256], char fileTo[256])
     cout<<fileFrom<<" >> "<<fileTo<<endl;
 }
 
-void FileContentToFolderFiles(char file[256], char folder[256], bool includeSubfolders)
+void FileContentToFolderFiles(char* file, char* folder, bool includeSubfolders)
 {
     FixPath(folder);
     DIR *dir;
@@ -34,7 +35,7 @@ void FileContentToFolderFiles(char file[256], char folder[256], bool includeSubf
           if(skippoints>1)
           {
               ifstream inputfile(file);
-              char fulldir[200];
+              char fulldir[MAX_PATH_LENGTH];
               strcpy(fulldir, folder);
               strcat(fulldir, ent->d_name);
 
@@ -69,19 +70,19 @@ void ReplaceStringInString(string& subject, const string& search, const string& 
     }
 }
 
-void ReplaceStringInFile(char filePath[256], string toReplace, string replaceWith)
+void ReplaceStringInFile(char* filePath, string toReplace, string replaceWith)
 {
     ifstream inputFile(filePath);
-    
+
     string contents((istreambuf_iterator<char>(inputFile)), (istreambuf_iterator<char>()));
     ReplaceStringInString(contents, toReplace, replaceWith);
-    
+
     ofstream outputFile(filePath);
     outputFile<<contents;
     outputFile.close();
 }
 
-void ReplaceStringInFolderFiles(char path[256], string toReplace, string replaceWith, bool includeSubfolders)
+void ReplaceStringInFolderFiles(char* path, string toReplace, string replaceWith, bool includeSubfolders)
 {
     FixPath(path);
     DIR *dir;
@@ -93,7 +94,7 @@ void ReplaceStringInFolderFiles(char path[256], string toReplace, string replace
       {
           if(skippoints>1)
           {
-            char fulldir[256];
+              char fulldir[MAX_PATH_LENGTH];
               strcpy(fulldir, path);
               strcat(fulldir, ent->d_name);
               if(GetFileAttributes(fulldir) & FILE_ATTRIBUTE_DIRECTORY)
@@ -113,6 +114,6 @@ void ReplaceStringInFolderFiles(char path[256], string toReplace, string replace
     }
     else
     {
-        perror ("");
+        perror ("Couldn't open folder");
     }
 }
